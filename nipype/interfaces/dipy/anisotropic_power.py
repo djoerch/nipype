@@ -39,7 +39,7 @@ class APMQball(DipyDiffusionInterface):
     def _run_interface(self, runtime):
         from dipy.reconst import shm
         from dipy.data import get_sphere
-        from dipy.reconst.peaks import peaks_from_model
+        from dipy.direction import peaks_from_model
 
         gtab = self._get_gradient_table()
 
