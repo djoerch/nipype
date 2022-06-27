@@ -2,6 +2,7 @@
 
 import numpy as np
 import nibabel as nb
+from traits.trait_types import Int
 
 from ... import logging
 from ..base import TraitedSpec, File, isdefined
@@ -12,6 +13,12 @@ IFLOGGER = logging.getLogger("nipype.interface")
 
 class APMQballInputSpec(DipyBaseInterfaceInputSpec):
     mask_file = File(exists=True, desc="An optional brain mask")
+    num_processes = Int(
+        4,
+        usedefault=True,
+        mandatory=False,
+        desc="Number of threads to be used during computation.",
+    )
 
 
 class APMQballOutputSpec(TraitedSpec):
@@ -60,6 +67,7 @@ class APMQball(DipyDiffusionInterface):
             min_separation_angle=25,
             sphere=sphere,
             mask=mask,
+            num_processes=self.inputs.num_processes,
         )
         apm = shm.anisotropic_power(peaks.shm_coeff)
         out_file = self._gen_filename("apm")
