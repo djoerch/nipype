@@ -67,6 +67,7 @@ class APMQball(DipyDiffusionInterface):
             min_separation_angle=25,
             sphere=sphere,
             mask=mask,
+            parallel=True,
             num_processes=self.inputs.num_processes,
         )
         apm = shm.anisotropic_power(peaks.shm_coeff)
