@@ -3,14 +3,15 @@
 # vi: set ft=python sts=4 ts=4 sw=4 et:
 """The ants module provides basic functions for interfacing with ANTS tools."""
 import os
+from packaging.version import Version, parse
 
 # Local imports
-from ... import logging, LooseVersion
+from ... import logging
 from ..base import CommandLine, CommandLineInputSpec, traits, isdefined, PackageInfo
 
 iflogger = logging.getLogger("nipype.interface")
 
-# -Using -1 gives primary responsibilty to ITKv4 to do the correct
+# -Using -1 gives primary responsibility to ITKv4 to do the correct
 #  thread limitings.
 # -Using 1 takes a very conservative approach to avoid overloading
 #  the computer (when running MultiProc) by forcing everything to
@@ -19,7 +20,7 @@ iflogger = logging.getLogger("nipype.interface")
 LOCAL_DEFAULT_NUMBER_OF_THREADS = 1
 # -Using NSLOTS has the same behavior as ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS
 #  as long as ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS is not set.  Otherwise
-#  ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS takes precidence.
+#  ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS takes precedence.
 #  This behavior states that you the user explicitly specifies
 #  num_threads, then respect that no matter what SGE tries to limit.
 PREFERED_ITKv4_THREAD_LIMIT_VARIABLE = "NSLOTS"
@@ -43,13 +44,16 @@ class Info(PackageInfo):
         # -githash may or may not be appended
         v_string = v_string.split("-")[0]
 
-        # 2.2.0-equivalent version string
-        if "post" in v_string and LooseVersion(v_string) >= LooseVersion(
-            "2.1.0.post789"
-        ):
-            return "2.2.0"
-        else:
-            return ".".join(v_string.split(".")[:3])
+        version = parse(v_string)
+
+        # Known mislabeled versions
+        if version.is_postrelease:
+            if version.base_version == "2.1.0" and version.post >= 789:
+                return "2.2.0"
+
+        # Unless we know of a specific reason to re-version, we will
+        # treat the base version (before pre/post/dev) as authoritative
+        return version.base_version
 
 
 class ANTSCommandInputSpec(CommandLineInputSpec):

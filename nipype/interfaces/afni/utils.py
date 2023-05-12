@@ -302,7 +302,6 @@ class BrickStat(AFNICommandBase):
     output_spec = BrickStatOutputSpec
 
     def aggregate_outputs(self, runtime=None, needed_outputs=None):
-
         outputs = self._outputs()
 
         outfile = os.path.join(os.getcwd(), "stat_result.json")
@@ -539,27 +538,27 @@ class CatInputSpec(AFNICommandInputSpec):
         argstr="-sel %s",
     )
     out_int = traits.Bool(
-        desc="specifiy int data type for output",
+        desc="specify int data type for output",
         argstr="-i",
         xor=["out_format", "out_nice", "out_double", "out_fint", "out_cint"],
     )
     out_nice = traits.Bool(
-        desc="specifiy nice data type for output",
+        desc="specify nice data type for output",
         argstr="-n",
         xor=["out_format", "out_int", "out_double", "out_fint", "out_cint"],
     )
     out_double = traits.Bool(
-        desc="specifiy double data type for output",
+        desc="specify double data type for output",
         argstr="-d",
         xor=["out_format", "out_nice", "out_int", "out_fint", "out_cint"],
     )
     out_fint = traits.Bool(
-        desc="specifiy int, rounded down, data type for output",
+        desc="specify int, rounded down, data type for output",
         argstr="-f",
         xor=["out_format", "out_nice", "out_double", "out_int", "out_cint"],
     )
     out_cint = traits.Bool(
-        desc="specifiy int, rounded up, data type for output",
+        desc="specify int, rounded up, data type for output",
         xor=["out_format", "out_nice", "out_double", "out_fint", "out_int"],
     )
 
@@ -693,7 +692,7 @@ class CenterMassInputSpec(CommandLineInputSpec):
         argstr="-set %f %f %f",
     )
     local_ijk = traits.Bool(
-        desc="Output values as (i,j,k) in local orienation", argstr="-local_ijk"
+        desc="Output values as (i,j,k) in local orientation", argstr="-local_ijk"
     )
     roi_vals = traits.List(
         traits.Int,
@@ -2151,7 +2150,7 @@ class NwarpCatInputSpec(AFNICommandInputSpec):
         usedefault=True,
     )
     expad = traits.Int(
-        desc="Pad the nonlinear warps by the given number of voxels voxels in "
+        desc="Pad the nonlinear warps by the given number of voxels in "
         "all directions. The warp displacements are extended by linear "
         "extrapolation from the faces of the input grid..",
         argstr="-expad %d",
@@ -2554,11 +2553,11 @@ voxel edge lengths.""",
 
 class ReHoOutputSpec(TraitedSpec):
     out_file = File(exists=True, desc="Voxelwise regional homogeneity map")
-    out_vals = File(desc="Table of labelwise regional homogenity values")
+    out_vals = File(desc="Table of labelwise regional homogeneity values")
 
 
 class ReHo(AFNICommandBase):
-    """Compute regional homogenity for a given neighbourhood.l,
+    """Compute regional homogeneity for a given neighbourhood.l,
     based on a local neighborhood of that voxel.
 
     For complete details, see the `3dReHo Documentation.
@@ -2595,7 +2594,6 @@ class ReHo(AFNICommandBase):
 
 
 class ResampleInputSpec(AFNICommandInputSpec):
-
     in_file = File(
         desc="input file to 3dresample",
         argstr="-inset %s",
@@ -2740,7 +2738,7 @@ class TCatSBInputSpec(AFNICommandInputSpec):
 
 class TCatSubBrick(AFNICommand):
     """Hopefully a temporary function to allow sub-brick selection until
-    afni file managment is improved.
+    afni file management is improved.
 
     For complete details, see the `3dTcat Documentation.
     <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTcat.html>`_

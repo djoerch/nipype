@@ -4,9 +4,11 @@
 """Provide a base interface to AFNI commands."""
 import os
 from sys import platform
-from distutils import spawn
+import shutil
 
-from ... import logging, LooseVersion
+from looseversion import LooseVersion
+
+from ... import logging
 from ...utils.filemanip import split_filename, fname_presuffix
 from ..base import (
     CommandLine,
@@ -262,8 +264,8 @@ class AFNICommand(AFNICommandBase):
         Generate a filename based on the given parameters.
 
         The filename will take the form: cwd/basename<suffix><ext>.
-        If change_ext is True, it will use the extentions specified in
-        <instance>intputs.output_type.
+        If change_ext is True, it will use the extensions specified in
+        <instance>inputs.output_type.
 
         Parameters
         ----------
@@ -317,7 +319,7 @@ class AFNIPythonCommand(AFNICommand):
     def cmd(self):
         """Revise the command path."""
         orig_cmd = super(AFNIPythonCommand, self).cmd
-        found = spawn.find_executable(orig_cmd)
+        found = shutil.which(orig_cmd)
         return found if found is not None else orig_cmd
 
     @property

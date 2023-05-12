@@ -254,7 +254,6 @@ class DataSinkInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
 
     # Set call-able inputs attributes
     def __setattr__(self, key, value):
-
         if key not in self.copyable_trait_names():
             if not isdefined(value):
                 super(DataSinkInputSpec, self).__setattr__(key, value)
@@ -267,7 +266,6 @@ class DataSinkInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
 
 # DataSink outputs
 class DataSinkOutputSpec(TraitedSpec):
-
     # Init out file
     out_file = traits.Any(desc="datasink output")
 
@@ -575,7 +573,6 @@ class DataSink(IOBase):
         try:
             _get_head_bucket(s3_resource, bucket_name)
         except Exception as exc:
-
             # Try to connect anonymously
             s3_resource.meta.client.meta.events.register(
                 "choose-signer.s3.*", botocore.handlers.disable_signing
@@ -764,7 +761,7 @@ class DataSink(IOBase):
                     out_files.append(s3dst)
                 # Otherwise, copy locally src -> dst
                 if not s3_flag or isdefined(self.inputs.local_copy):
-                    # Create output directory if it doesnt exist
+                    # Create output directory if it doesn't exist
                     if not os.path.exists(path):
                         try:
                             os.makedirs(path)
@@ -1313,12 +1310,11 @@ class DataGrabber(IOBase):
 
 
 class SelectFilesInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
-
     base_directory = Directory(exists=True, desc="Root path common to templates.")
     sort_filelist = traits.Bool(
         True,
         usedefault=True,
-        desc="When matching mutliple files, return them" " in sorted order.",
+        desc="When matching multiple files, return them" " in sorted order.",
     )
     raise_on_empty = traits.Bool(
         True,
@@ -1346,7 +1342,7 @@ class SelectFiles(IOBase):
 
     This interface uses Python's {}-based string formatting syntax to plug
     values (possibly known only at workflow execution time) into string
-    templates and collect files from persistant storage. These templates can
+    templates and collect files from persistent storage. These templates can
     also be combined with glob wildcards (``*``, ``?``) and character ranges (``[...]``).
     The field names in the formatting template (i.e. the terms in braces) will
     become inputs fields on the interface, and the keys in the templates
@@ -1447,7 +1443,6 @@ class SelectFiles(IOBase):
             raise ValueError(msg)
 
         for field, template in list(self._templates.items()):
-
             find_dirs = template[-1] == os.sep
 
             # Build the full template path
@@ -1513,7 +1508,7 @@ class DataFinder(IOBase):
     Will recursively search any subdirectories by default. This can be limited
     with the min/max depth options.
     Matched paths are available in the output 'out_paths'. Any named groups of
-    captured text from the regular expression are also available as ouputs of
+    captured text from the regular expression are also available as outputs of
     the same name.
 
     Examples
@@ -1583,7 +1578,7 @@ class DataFinder(IOBase):
             ]
         self.result = None
         for root_path in self.inputs.root_paths:
-            # Handle tilda/env variables and remove extra seperators
+            # Handle tilda/env variables and remove extra separators
             root_path = os.path.normpath(
                 os.path.expandvars(os.path.expanduser(root_path))
             )
@@ -1612,7 +1607,7 @@ class DataFinder(IOBase):
             for key, vals in list(self.result.items()):
                 self.result[key] = vals[0]
         else:
-            # sort all keys acording to out_paths
+            # sort all keys according to out_paths
             for key in list(self.result.keys()):
                 if key == "out_paths":
                     continue
@@ -1683,7 +1678,7 @@ class FSSourceOutputSpec(TraitedSpec):
         File(exists=True), desc="Inflated surface meshes", loc="surf"
     )
     pial = OutputMultiPath(
-        File(exists=True), desc="Gray matter/pia mater surface meshes", loc="surf"
+        File(exists=True), desc="Gray matter/pia matter surface meshes", loc="surf"
     )
     area_pial = OutputMultiPath(
         File(exists=True),
@@ -1853,7 +1848,6 @@ class FreeSurferSource(IOBase):
 
 
 class XNATSourceInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
-
     query_template = Str(
         mandatory=True,
         desc=("Layout used to get files. Relative to base " "directory if defined"),
@@ -2065,7 +2059,6 @@ class XNATSource(LibraryBaseInterface, IOBase):
 
 
 class XNATSinkInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
-
     _outputs = traits.Dict(Str, value={}, usedefault=True)
 
     server = Str(mandatory=True, requires=["user", "pwd"], xor=["config"])
@@ -2083,7 +2076,7 @@ class XNATSinkInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
 
     assessor_id = Str(
         desc=(
-            "Option to customize ouputs representation in XNAT - "
+            "Option to customize outputs representation in XNAT - "
             "assessor level will be used with specified id"
         ),
         xor=["reconstruction_id"],
@@ -2091,7 +2084,7 @@ class XNATSinkInputSpec(DynamicTraitedSpec, BaseInterfaceInputSpec):
 
     reconstruction_id = Str(
         desc=(
-            "Option to customize ouputs representation in XNAT - "
+            "Option to customize outputs representation in XNAT - "
             "reconstruction level will be used with specified id"
         ),
         xor=["assessor_id"],
@@ -2154,7 +2147,6 @@ class XNATSink(LibraryBaseInterface, IOBase):
                 )
 
                 if not shared.exists():  # subject not in share project
-
                     share_project = xnat.select("/project/%s" % self.inputs.project_id)
 
                     if not share_project.exists():  # check project exists
@@ -2185,9 +2177,7 @@ class XNATSink(LibraryBaseInterface, IOBase):
 
         # gather outputs and upload them
         for key, files in list(self.inputs._outputs.items()):
-
             for name in ensure_list(files):
-
                 if isinstance(name, list):
                     for i, file_name in enumerate(name):
                         push_file(
@@ -2206,7 +2196,6 @@ def unquote_id(string):
 
 
 def push_file(self, xnat, file_name, out_key, uri_template_args):
-
     # grab info from output file names
     val_list = [
         unquote_id(val)
@@ -2269,7 +2258,6 @@ def push_file(self, xnat, file_name, out_key, uri_template_args):
 
     # shares the experiment back to the original project if relevant
     if "original_project" in uri_template_args:
-
         experiment_template = (
             "/project/%(original_project)s"
             "/subject/%(subject_id)s/experiment/%(experiment_id)s"
@@ -2318,7 +2306,6 @@ class SQLiteSink(LibraryBaseInterface, IOBase):
     _pkg = "sqlite3"
 
     def __init__(self, input_names, **inputs):
-
         super(SQLiteSink, self).__init__(**inputs)
 
         self._input_names = ensure_list(input_names)
@@ -2381,7 +2368,6 @@ class MySQLSink(IOBase):
     input_spec = MySQLSinkInputSpec
 
     def __init__(self, input_names, **inputs):
-
         super(MySQLSink, self).__init__(**inputs)
 
         self._input_names = ensure_list(input_names)
@@ -2866,6 +2852,9 @@ class BIDSDataGrabberInputSpec(DynamicTraitedSpec):
     output_query = traits.Dict(
         key_trait=Str, value_trait=traits.Dict, desc="Queries for outfield outputs"
     )
+    load_layout = Directory(
+        exists=True, desc="Path to load already saved Bidslayout.", mandatory=False
+    )
     raise_on_empty = traits.Bool(
         True,
         usedefault=True,
@@ -2965,9 +2954,13 @@ class BIDSDataGrabber(LibraryBaseInterface, IOBase):
     def _list_outputs(self):
         from bids import BIDSLayout
 
-        layout = BIDSLayout(
-            self.inputs.base_dir, derivatives=self.inputs.index_derivatives
-        )
+        # if load_layout is given load layout which is on some datasets much faster
+        if isdefined(self.inputs.load_layout):
+            layout = BIDSLayout.load(self.inputs.load_layout)
+        else:
+            layout = BIDSLayout(
+                self.inputs.base_dir, derivatives=self.inputs.index_derivatives
+            )
 
         if isdefined(self.inputs.extra_derivatives):
             layout.add_derivatives(self.inputs.extra_derivatives)

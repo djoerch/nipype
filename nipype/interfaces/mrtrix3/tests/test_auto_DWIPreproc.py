@@ -13,18 +13,26 @@ def test_DWIPreproc_inputs():
         bval_scale=dict(
             argstr="-bvalue_scaling %s",
         ),
+        eddy_mask=dict(
+            argstr="-eddy_mask %s",
+            extensions=None,
+        ),
         eddy_options=dict(
             argstr='-eddy_options "%s"',
+        ),
+        eddy_slspec=dict(
+            argstr="-eddy_slspec %s",
+            extensions=None,
+        ),
+        eddyqc_all=dict(
+            argstr="-eddyqc_all %s",
+        ),
+        eddyqc_text=dict(
+            argstr="-eddyqc_text %s",
         ),
         environ=dict(
             nohash=True,
             usedefault=True,
-        ),
-        export_grad_fsl=dict(
-            argstr="-export_grad_fsl",
-        ),
-        export_grad_mrtrix=dict(
-            argstr="-export_grad_mrtrix",
         ),
         grad_file=dict(
             argstr="-grad %s",
@@ -52,9 +60,20 @@ def test_DWIPreproc_inputs():
             mandatory=True,
             position=0,
         ),
+        json_import=dict(
+            argstr="-json_import %s",
+            extensions=None,
+        ),
         nthreads=dict(
             argstr="-nthreads %d",
             nohash=True,
+        ),
+        out_bval=dict(
+            extensions=None,
+        ),
+        out_bvec=dict(
+            argstr="-export_grad_fsl %s %s",
+            extensions=None,
         ),
         out_file=dict(
             argstr="%s",
@@ -64,18 +83,14 @@ def test_DWIPreproc_inputs():
             usedefault=True,
         ),
         out_grad_fsl=dict(
-            argstr="%s, %s",
-            requires=["export_grad_fsl"],
+            argstr="-export_grad_fsl %s, %s",
         ),
         out_grad_mrtrix=dict(
-            argstr="%s",
+            argstr="-export_grad_mrtrix %s",
             extensions=None,
-            requires=["export_grad_mrtrix"],
-            usedefault=True,
         ),
         pe_dir=dict(
             argstr="-pe_dir %s",
-            mandatory=True,
         ),
         ro_time=dict(
             argstr="-readout_time %f",

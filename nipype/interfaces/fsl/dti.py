@@ -462,7 +462,6 @@ class BEDPOSTX5(FSLXCommand):
             self._cmd = self._default_cmd
 
     def _run_interface(self, runtime):
-
         subjectdir = os.path.abspath(self.inputs.out_dir)
         if not os.path.exists(subjectdir):
             os.makedirs(subjectdir)
@@ -877,7 +876,7 @@ class ProbTrackX(FSLCommand):
             out_dir = self.inputs.out_dir
 
         outputs["log"] = os.path.abspath(os.path.join(out_dir, "probtrackx.log"))
-        # utputs['way_total'] = os.path.abspath(os.path.join(out_dir,
+        # outputs['way_total'] = os.path.abspath(os.path.join(out_dir,
         #                                                    'waytotal'))
         if isdefined(self.inputs.opd is True):
             if isinstance(self.inputs.seed, list) and isinstance(
@@ -1347,12 +1346,11 @@ class FindTheBiggest(FSLCommand):
 
 
 class TractSkeletonInputSpec(FSLCommandInputSpec):
-
     in_file = File(
         exists=True,
         mandatory=True,
         argstr="-i %s",
-        desc="input image (typcially mean FA volume)",
+        desc="input image (typically mean FA volume)",
     )
     _proj_inputs = ["threshold", "distance_map", "data_file"]
     project_data = traits.Bool(
@@ -1385,7 +1383,6 @@ class TractSkeletonInputSpec(FSLCommandInputSpec):
 
 
 class TractSkeletonOutputSpec(TraitedSpec):
-
     projected_data = File(desc="input data projected onto skeleton")
     skeleton_file = File(desc="tract skeleton image")
 
@@ -1402,7 +1399,7 @@ class TractSkeleton(FSLCommand):
     ``search_mask_file`` and ``use_cingulum_mask`` inputs are also used in data
     projection, but ``use_cingulum_mask`` is set to True by default.  This mask
     controls where the projection algorithm searches within a circular space
-    around a tract, rather than in a single perpindicular direction.
+    around a tract, rather than in a single perpendicular direction.
 
     Example
     -------
@@ -1468,7 +1465,6 @@ class TractSkeleton(FSLCommand):
 
 
 class DistanceMapInputSpec(FSLCommandInputSpec):
-
     in_file = File(
         exists=True,
         mandatory=True,
@@ -1476,7 +1472,7 @@ class DistanceMapInputSpec(FSLCommandInputSpec):
         desc="image to calculate distance values for",
     )
     mask_file = File(
-        exists=True, argstr="--mask=%s", desc="binary mask to contrain calculations"
+        exists=True, argstr="--mask=%s", desc="binary mask to constrain calculations"
     )
     invert_input = traits.Bool(argstr="--invert", desc="invert input image")
     local_max_file = traits.Either(
@@ -1492,7 +1488,6 @@ class DistanceMapInputSpec(FSLCommandInputSpec):
 
 
 class DistanceMapOutputSpec(TraitedSpec):
-
     distance_map = File(exists=True, desc="value is distance to nearest nonzero voxels")
     local_max_file = File(desc="image of local maxima")
 

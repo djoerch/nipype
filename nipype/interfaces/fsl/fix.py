@@ -96,7 +96,7 @@ class TrainingSetCreator(BaseInterface):
     the ones that have a hand_labels_noise.txt file in them.
 
     This is outsourced as a separate class, so that the pipeline is
-    rerun everytime a handlabeled file has been changed, or a new one
+    rerun every time a handlabeled file has been changed, or a new one
     created.
 
     """
@@ -302,7 +302,6 @@ class Classifier(CommandLine):
     cmd = "fix -c"
 
     def _gen_artifacts_list_file(self, mel_ica, thresh):
-
         _, trained_wts_file = os.path.split(self.inputs.trained_wts_file)
         trained_wts_filestem = trained_wts_file.split(".")[0]
         filestem = "fix4melview_" + trained_wts_filestem + "_thr"

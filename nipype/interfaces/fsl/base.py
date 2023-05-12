@@ -51,7 +51,6 @@ class Info(PackageInfo):
     >>> Info.version()  # doctest: +SKIP
     >>> Info.output_type()  # doctest: +SKIP
 
-
     """
 
     ftypes = {
@@ -207,8 +206,8 @@ class FSLCommand(CommandLine):
         """Generate a filename based on the given parameters.
 
         The filename will take the form: cwd/basename<suffix><ext>.
-        If change_ext is True, it will use the extentions specified in
-        <instance>intputs.output_type.
+        If change_ext is True, it will use the extensions specified in
+        <instance>inputs.output_type.
 
         Parameters
         ----------

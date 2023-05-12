@@ -453,7 +453,7 @@ class RegistrationInputSpec(ANTSCommandInputSpec):
         usedefault=True,  # This should be true for explicit completeness
         desc=(
             "Initialize linear transforms from the previous stage. By enabling this option, "
-            "the current linear stage transform is directly intialized from the previous "
+            "the current linear stage transform is directly initialized from the previous "
             "stages linear transform; this allows multiple linear stages to be run where "
             "each stage directly updates the estimated linear transform from the previous "
             "stage. (e.g. Translation -> Rigid -> Affine). "
@@ -585,7 +585,11 @@ class RegistrationInputSpec(ANTSCommandInputSpec):
         usedefault=True,
         desc="The Lower quantile to clip image ranges",
     )
-
+    random_seed = traits.Int(
+        argstr="--random-seed %d",
+        desc="Fixed seed for random number generation",
+        min_ver="2.3.0",
+    )
     verbose = traits.Bool(
         argstr="-v", default_value=False, usedefault=True, nohash=True
     )
@@ -637,7 +641,7 @@ class Registration(ANTSCommand):
     *stages*. For example first an Affine, then a Rigid, and ultimately a non-linear
     (Syn)-transformation.
 
-    antsRegistration can be initialized using one ore more transforms from moving_image
+    antsRegistration can be initialized using one or more transforms from moving_image
     to fixed_image with the ``initial_moving_transform``-input. For example, when you
     already have a warpfield that corrects for geometrical distortions in an EPI (functional) image,
     that you want to apply before an Affine registration to a structural image.
@@ -861,7 +865,7 @@ class Registration(ANTSCommand):
 --write-composite-transform 0'
 
     One can use multiple similarity metrics in a single registration stage.The Node below first
-    performs a linear registation using only the Mutual Information ('Mattes')-metric.
+    performs a linear registration using only the Mutual Information ('Mattes')-metric.
     In a second stage, it performs a non-linear registration ('Syn') using both a
     Mutual Information and a local cross-correlation ('CC')-metric. Both metrics are weighted
     equally ('metric_weight' is .5 for both). The Mutual Information- metric uses 32 bins.
@@ -1293,16 +1297,12 @@ class Registration(ANTSCommand):
                 do_center_of_mass_init,
             )
         elif opt == "interpolation":
-            if (
-                self.inputs.interpolation
-                in [
-                    "BSpline",
-                    "MultiLabel",
-                    "Gaussian",
-                    "GenericLabel",
-                ]
-                and isdefined(self.inputs.interpolation_parameters)
-            ):
+            if self.inputs.interpolation in [
+                "BSpline",
+                "MultiLabel",
+                "Gaussian",
+                "GenericLabel",
+            ] and isdefined(self.inputs.interpolation_parameters):
                 return "--interpolation %s[ %s ]" % (
                     self.inputs.interpolation,
                     ", ".join(
@@ -1595,14 +1595,17 @@ class MeasureImageSimilarity(ANTSCommand):
     output_spec = MeasureImageSimilarityOutputSpec
 
     def _metric_constructor(self):
-        retval = '--metric {metric}["{fixed_image}","{moving_image}",{metric_weight},' "{radius_or_number_of_bins},{sampling_strategy},{sampling_percentage}]".format(
-            metric=self.inputs.metric,
-            fixed_image=self.inputs.fixed_image,
-            moving_image=self.inputs.moving_image,
-            metric_weight=self.inputs.metric_weight,
-            radius_or_number_of_bins=self.inputs.radius_or_number_of_bins,
-            sampling_strategy=self.inputs.sampling_strategy,
-            sampling_percentage=self.inputs.sampling_percentage,
+        retval = (
+            '--metric {metric}["{fixed_image}","{moving_image}",{metric_weight},'
+            "{radius_or_number_of_bins},{sampling_strategy},{sampling_percentage}]".format(
+                metric=self.inputs.metric,
+                fixed_image=self.inputs.fixed_image,
+                moving_image=self.inputs.moving_image,
+                metric_weight=self.inputs.metric_weight,
+                radius_or_number_of_bins=self.inputs.radius_or_number_of_bins,
+                sampling_strategy=self.inputs.sampling_strategy,
+                sampling_percentage=self.inputs.sampling_percentage,
+            )
         )
         return retval
 
@@ -1708,6 +1711,11 @@ Transform type
         argstr="-p %s",
         desc="precision type (default = double)",
         usedefault=True,
+    )
+    random_seed = traits.Int(
+        argstr="-e %d",
+        desc="fixed random seed",
+        min_ver="2.3.0",
     )
 
 

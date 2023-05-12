@@ -136,7 +136,7 @@ class CAT12SegmentInputSpec(SPMCommandInputSpec):
         " method that refines the probability maps of the SPM approach by region-growing techniques of "
         "the gcut approach with a final surface-based optimization strategy. This is currently the method"
         " with the most accurate and reliable results. If you use already skull-stripped data you can "
-        "turn off skull-stripping although this is automaticaly detected in most cases. Please note that "
+        "turn off skull-stripping although this is automatically detected in most cases. Please note that "
         "the choice of the skull-stripping method will also influence the estimation of TIV, because the"
         " methods mainly differ in the handling of the outer CSF around the cortical surface. "
         "\nPossible Values:\n - none (already skull-stripped): -1;\n - SPM approach: 0; "
@@ -329,7 +329,7 @@ class CAT12SegmentInputSpec(SPMCommandInputSpec):
     # Labels
     _help_label_desc = (
         "This is the option to save a labeled version of your segmentations in the %s space for fast visual "
-        "comparision. Labels are saved as Partial Volume Estimation (PVE) values with different mix "
+        "comparison. Labels are saved as Partial Volume Estimation (PVE) values with different mix "
         "classes for GM-WM (2.5) and GM-CSF (1.5). BG=0, CSF=1, GM=2, WM=3, WMH=4 (if WMHC=3), "
         "SL=1.5 (if SLC)"
     )
@@ -537,7 +537,6 @@ class CAT12Segment(SPMCommand):
         ]
 
         for tidx, tissue in enumerate(["gm", "wm", "csf"]):
-
             for image, prefix in [("modulated", "mw"), ("dartel", "r"), ("native", "")]:
                 outtype = f"{tissue}_output_{image}"
                 if isdefined(getattr(self.inputs, outtype)) and getattr(
@@ -594,7 +593,6 @@ class CAT12Segment(SPMCommand):
 
 
 class CAT12SANLMDenoisingInputSpec(SPMCommandInputSpec):
-
     in_files = InputMultiPath(
         ImageFileSPM(exists=True),
         field="data",
@@ -679,7 +677,6 @@ class CAT12SANLMDenoisingInputSpec(SPMCommandInputSpec):
 
 
 class CAT12SANLMDenoisingOutputSpec(TraitedSpec):
-
     out_file = File(desc="out file")
 
 

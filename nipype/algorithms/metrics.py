@@ -42,13 +42,13 @@ class DistanceInputSpec(BaseInterfaceInputSpec):
         "eucl_wmean",
         "eucl_max",
         desc='""eucl_min": Euclidean distance between two closest points\
-        "eucl_cog": mean Euclidian distance between the Center of Gravity\
+        "eucl_cog": mean Euclidean distance between the Center of Gravity\
         of volume1 and CoGs of volume2\
-        "eucl_mean": mean Euclidian minimum distance of all volume2 voxels\
+        "eucl_mean": mean Euclidean minimum distance of all volume2 voxels\
         to volume1\
-        "eucl_wmean": mean Euclidian minimum distance of all volume2 voxels\
+        "eucl_wmean": mean Euclidean minimum distance of all volume2 voxels\
         to volume1 weighted by their values\
-        "eucl_max": maximum over minimum Euclidian distances of all volume2\
+        "eucl_max": maximum over minimum Euclidean distances of all volume2\
         voxels to volume1 (also known as the Hausdorff distance)',
         usedefault=True,
     )
@@ -150,7 +150,7 @@ class Distance(BaseInterface):
         import matplotlib.pyplot as plt
 
         plt.figure()
-        plt.hist(min_dist_matrix, 50, normed=1, facecolor="green")
+        plt.hist(min_dist_matrix, 50, density=True, facecolor="green")
         plt.savefig(self._hist_filename)
         plt.clf()
         plt.close()
@@ -337,7 +337,7 @@ class Overlap(BaseInterface):
         if self.inputs.weighting != "none":
             weights = weights / np.array(volumes1)
             if self.inputs.weighting == "squared_vol":
-                weights = weights ** 2
+                weights = weights**2
         weights = weights / np.sum(weights)
 
         both_data = np.zeros(data1.shape)
@@ -500,7 +500,7 @@ class FuzzyOverlap(SimpleInterface):
             volumes = np.sum((refdata + tstdata) > 0, axis=1).reshape((-1, ncomp))
             weights = 1.0 / volumes
             if self.inputs.weighting == "squared_vol":
-                weights = weights ** 2
+                weights = weights**2
 
         weights = weights / np.sum(weights)
         dices = 2.0 * jaccards / (jaccards + 1.0)
@@ -591,7 +591,7 @@ class ErrorMap(BaseInterface):
 
         # Scale the difference
         if self.inputs.metric == "sqeuclidean":
-            errvector = diffvector ** 2
+            errvector = diffvector**2
             if comps > 1:
                 errvector = np.sum(errvector, axis=1)
             else:

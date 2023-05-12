@@ -116,7 +116,6 @@ def createoutputdirs(outputs):
 
 
 class SampleToSurfaceInputSpec(FSTraitedSpec):
-
     source_file = File(
         exists=True,
         mandatory=True,
@@ -289,7 +288,6 @@ class SampleToSurfaceInputSpec(FSTraitedSpec):
 
 
 class SampleToSurfaceOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="surface file")
     hits_file = File(exists=True, desc="image with number of hits at each voxel")
     vox_file = File(
@@ -426,7 +424,6 @@ class SampleToSurface(FSCommand):
 
 
 class SurfaceSmoothInputSpec(FSTraitedSpec):
-
     in_file = File(mandatory=True, argstr="--sval %s", desc="source surface file")
     subject_id = traits.String(
         mandatory=True, argstr="--s %s", desc="subject id of surface file"
@@ -455,14 +452,13 @@ class SurfaceSmoothInputSpec(FSTraitedSpec):
 
 
 class SurfaceSmoothOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="smoothed surface file")
 
 
 class SurfaceSmooth(FSCommand):
     """Smooth a surface image with mri_surf2surf.
 
-    The surface is smoothed by an interative process of averaging the
+    The surface is smoothed by an iterative process of averaging the
     value at each vertex with those of its adjacent neighbors. You may supply
     either the number of iterations to run or a desired effective FWHM of the
     smoothing process.  If the latter, the underlying program will calculate
@@ -753,7 +749,6 @@ class Surface2VolTransform(FSCommand):
 
 
 class ApplyMaskInputSpec(FSTraitedSpec):
-
     in_file = File(
         exists=True,
         mandatory=True,
@@ -803,7 +798,6 @@ class ApplyMaskInputSpec(FSTraitedSpec):
 
 
 class ApplyMaskOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="masked image")
 
 
@@ -822,7 +816,6 @@ class ApplyMask(FSCommand):
 
 
 class SurfaceSnapshotsInputSpec(FSTraitedSpec):
-
     subject_id = traits.String(
         position=1, argstr="%s", mandatory=True, desc="subject to visualize"
     )
@@ -878,7 +871,7 @@ class SurfaceSnapshotsInputSpec(FSTraitedSpec):
     )
     overlay_range_offset = traits.Float(
         argstr="-foffset %.3f",
-        desc="overlay range will be symettric around offset value",
+        desc="overlay range will be symmetric around offset value",
     )
 
     truncate_overlay = traits.Bool(
@@ -956,7 +949,6 @@ class SurfaceSnapshotsInputSpec(FSTraitedSpec):
 
 
 class SurfaceSnapshotsOutputSpec(TraitedSpec):
-
     snapshots = OutputMultiPath(
         File(exists=True), desc="tiff images of the surface from different perspectives"
     )
@@ -1118,12 +1110,10 @@ class SurfaceSnapshots(FSCommand):
 
 
 class ImageInfoInputSpec(FSTraitedSpec):
-
     in_file = File(exists=True, position=1, argstr="%s", desc="image to query")
 
 
 class ImageInfoOutputSpec(TraitedSpec):
-
     info = traits.Any(desc="output of mri_info")
     out_file = File(exists=True, desc="text file with image information")
     data_type = traits.String(desc="image data type")
@@ -1138,7 +1128,6 @@ class ImageInfoOutputSpec(TraitedSpec):
 
 
 class ImageInfo(FSCommand):
-
     _cmd = "mri_info"
     input_spec = ImageInfoInputSpec
     output_spec = ImageInfoOutputSpec
@@ -1438,13 +1427,13 @@ class MRITessellateInputSpec(FSTraitedSpec):
         mandatory=True,
         position=-3,
         argstr="%s",
-        desc="Input volume to tesselate voxels from.",
+        desc="Input volume to tessellate voxels from.",
     )
     label_value = traits.Int(
         position=-2,
         argstr="%d",
         mandatory=True,
-        desc='Label value which to tesselate from the input volume. (integer, if input is "filled.mgz" volume, 127 is rh, 255 is lh)',
+        desc='Label value which to tessellate from the input volume. (integer, if input is "filled.mgz" volume, 127 is rh, 255 is lh)',
     )
     out_file = File(
         argstr="%s",
@@ -1600,13 +1589,13 @@ class MRIMarchingCubesInputSpec(FSTraitedSpec):
         mandatory=True,
         position=1,
         argstr="%s",
-        desc="Input volume to tesselate voxels from.",
+        desc="Input volume to tessellate voxels from.",
     )
     label_value = traits.Int(
         position=2,
         argstr="%d",
         mandatory=True,
-        desc='Label value which to tesselate from the input volume. (integer, if input is "filled.mgz" volume, 127 is rh, 255 is lh)',
+        desc='Label value which to tessellate from the input volume. (integer, if input is "filled.mgz" volume, 127 is rh, 255 is lh)',
     )
     connectivity_value = traits.Int(
         1,
@@ -1676,7 +1665,7 @@ class SmoothTessellationInputSpec(FSTraitedSpec):
         argstr="%s",
         position=-2,
         copyfile=True,
-        desc="Input volume to tesselate voxels from.",
+        desc="Input volume to tessellate voxels from.",
     )
     curvature_averaging_iterations = traits.Int(
         argstr="-a %d", desc="Number of curvature averaging iterations (default=10)"
@@ -1842,7 +1831,7 @@ class ExtractMainComponentOutputSpec(TraitedSpec):
 
 
 class ExtractMainComponent(CommandLine):
-    """Extract the main component of a tesselated surface
+    """Extract the main component of a tessellated surface
 
     Examples
     --------
@@ -2015,7 +2004,6 @@ class Tkregister2(FSCommand):
 
 
 class AddXFormToHeaderInputSpec(FSTraitedSpec):
-
     # required
     in_file = File(
         exists=True, mandatory=True, position=-2, argstr="%s", desc="input volume"
@@ -2035,7 +2023,6 @@ class AddXFormToHeaderInputSpec(FSTraitedSpec):
 
 
 class AddXFormToHeaderOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="output volume")
 
 
@@ -2329,7 +2316,7 @@ class MRIFillOutputSpec(TraitedSpec):
 class MRIFill(FSCommand):
     """
     This program creates hemispheric cutting planes and fills white matter
-    with specific values for subsequent surface tesselation.
+    with specific values for subsequent surface tessellation.
 
     Examples
     ========
@@ -2730,7 +2717,7 @@ class MakeSurfacesInputSpec(FSTraitedSpec):
     )
     fix_mtl = traits.Bool(argstr="-fix_mtl", desc="Undocumented flag")
     no_white = traits.Bool(argstr="-nowhite", desc="Undocumented flag")
-    white_only = traits.Bool(argstr="-whiteonly", desc="Undocumented flage")
+    white_only = traits.Bool(argstr="-whiteonly", desc="Undocumented flag")
     in_aseg = File(argstr="-aseg %s", exists=True, desc="Input segmentation file")
     in_T1 = File(argstr="-T1 %s", exists=True, desc="Input brain or T1 file")
     mgz = traits.Bool(
@@ -2850,7 +2837,7 @@ class MakeSurfaces(FSCommand):
             return spec.argstr % suffix
         elif name == "in_orig":
             if value.endswith("lh.orig") or value.endswith("rh.orig"):
-                # {lh,rh}.orig inputs are not sepcified on command line
+                # {lh,rh}.orig inputs are not specified on command line
                 return
             else:
                 # if the input orig file is different than lh.orig or rh.orig

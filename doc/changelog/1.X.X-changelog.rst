@@ -1,3 +1,138 @@
+1.8.6 (April 05, 2023)
+======================
+
+Bug-fix release in the 1.8.x series.
+
+  * FIX: Update dcmstack interface for Py3 / newer pydicom (https://github.com/nipy/nipype/pull/3541)
+  * FIX: NiBabel 5, and NetworkX 3 and DIPY 1.6 compatibility (https://github.com/nipy/nipype/pull/3538)
+  * FIX: Check for non-mandatory output in DWIBiasCorrect (https://github.com/nipy/nipype/pull/3523)
+  * FIX: Removed leftover debug print statement in FEAT class (https://github.com/nipy/nipype/pull/3521)
+  * DOC: Fix a few more typos (https://github.com/nipy/nipype/pull/3516)
+  * DOC: Fix typos found by codespell (https://github.com/nipy/nipype/pull/3512)
+  * CI: Drop nipy tests until a fixed nipy is released (https://github.com/nipy/nipype/pull/3559)
+  * CI: Disable nipy tests generally, re-add with max numpy  (https://github.com/nipy/nipype/pull/3532)
+  * CI: GitHub Workflows security hardening  (https://github.com/nipy/nipype/pull/3519)
+  * CI: Allow tutorial test cancellation (https://github.com/nipy/nipype/pull/3514)
+
+
+1.8.5 (September 21, 2022)
+==========================
+
+Bug-fix release in the 1.8.x series.
+
+  * FIX: Use interpolation/method in numpy.percentile as available (https://github.com/nipy/nipype/pull/3506)
+  * FIX: Deployed Matlab applications must not call addpath() (https://github.com/nipy/nipype/pull/3509)
+  * FIX: Provide more runtime information when node execution fails (https://github.com/nipy/nipype/pull/3505)
+  * FIX: Fixed bug for work dirs longer than 255 characters, fixes #2061  (https://github.com/nipy/nipype/pull/3495)
+  * FIX: Update ApplyVDM to handle 4D inputs  (https://github.com/nipy/nipype/pull/3500)
+  * ENH: Explicitly specify write_text encoding format (https://github.com/nipy/nipype/pull/3508)
+  * DOC: Fix typos found by copdespell (https://github.com/nipy/nipype/pull/3510)
+  * MAINT: Add github action to trigger tutorials for release branches (https://github.com/nipy/nipype/pull/3504)
+  * CI: Set up build-test-deploy workflow on GHA (https://github.com/nipy/nipype/pull/3513)
+
+
+1.8.4 (September 01, 2022)
+==========================
+
+Bug-fix release in the 1.8.x series.
+
+This release sets a maximum traits version to avoid new, breaking changes.
+
+  * MNT: Pin traits < 6.4 (https://github.com/nipy/nipype/pull/3501)
+  * ENH: Add inputs to mrtrix3.DWIPreprocInputSpec and remove mandatory annotation for pe_dir (https://github.com/nipy/nipype/pull/3470)
+
+
+1.8.3 (July 14, 2022)
+=====================
+
+Bug-fix release in the 1.8.x series.
+
+This release includes compatibility fixes for nibabel 4.x and resolves a denial-of-service
+bug when the etelemetry server is down that resulted in excessive (blocking) network hits that
+would cause any tools using nipype interfaces to take a very long time.
+
+(`Full changelog <https://github.com/nipy/nipype/milestone/1.8.3?closed=1>`__)
+
+  * FIX: Argument order to ``numpy.save()`` (https://github.com/nipy/nipype/pull/3485)
+  * FIX: Add tolerance parameter to ComputeDVARS (https://github.com/nipy/nipype/pull/3489)
+  * FIX: Delay access of nibabel.trackvis until actually needed (https://github.com/nipy/nipype/pull/3488)
+  * FIX: Avoid excessive etelemetry pings (https://github.com/nipy/nipype/pull/3484)
+  * ENH: Added outputs' generation to DWIBiascorrect interface (https://github.com/nipy/nipype/pull/3476)
+
+
+1.8.2 (June 06, 2022)
+=====================
+
+Bug-fix release in the 1.8.x series.
+
+This release restores compatibility with networkx 2.8.3, which errors when
+graph nodes might conflict with pydot parsing.
+
+(`Full changelog <https://github.com/nipy/nipype/milestone/1.8.2?closed=1>`__)
+
+  * ENH: Enable compression with Gunzip interface (https://github.com/nipy/nipype/pull/3472)
+  * CI: Schedule weekly tests with cron (https://github.com/nipy/nipype/pull/3480)
+
+
+1.8.1 (May 16, 2022)
+====================
+
+Bug-fix release in the 1.8.x series.
+
+The previous release vendored ``distutils.version.LooseVersion``, and the vendored objects did not
+preserve compatibility with the ``distutils`` objects. This release switches to the
+``looseversion`` package that ensures compatibility.
+
+
+1.8.0 (May 10, 2022)
+====================
+
+New feature release in the 1.8.x series.
+
+The primary new features are a batch of PETSurfer interfaces.
+
+This release drops support for Python < 3.7 and Numpy < 1.17, triggering a minor version bump.
+Additionally, matplotlib < 2.1 will stop working with some interfaces, but more recent versions
+will start working.
+
+(`Full changelog <https://github.com/nipy/nipype/milestone/1.8.0?closed=1>`__)
+
+  * FIX: Change plt.hist() argument from deprecated 'normed' to 'density' (https://github.com/nipy/nipype/pull/3455)
+  * ENH: Add random seed option to ANTs registration (https://github.com/nipy/nipype/pull/3463)
+  * ENH: Add PETsurfer interfaces (https://github.com/nipy/nipype/pull/3437)
+  * ENH: Add Text2Vest and Vest2Text interfaces (https://github.com/nipy/nipype/pull/3447)
+  * REF: Optimize ICC_rep_anova with a memoized helper function (https://github.com/nipy/nipype/pull/3454)
+  * REF: Rearranging matmul order and using hermitian flag in ICC_rep_anova  (https://github.com/nipy/nipype/pull/3453)
+  * MNT: Drop distutils (https://github.com/nipy/nipype/pull/3458)
+  * CI: Cache test data (https://github.com/nipy/nipype/pull/3459)
+
+
+1.7.1 (April 05, 2022)
+======================
+
+(`Full changelog <https://github.com/nipy/nipype/milestone/1.7.1?closed=1>`__)
+
+  * FIX: Allow ``ConvertScalarImageToRGBInputSpec.mask_file`` to be ``"none"`` (https://github.com/nipy/nipype/pull/3364)
+  * FIX: Use a more robust strategy for detecting ANTs version (https://github.com/nipy/nipype/pull/3444)
+  * FIX: Retry renaming pkl(z) files on failure (https://github.com/nipy/nipype/pull/3404)
+  * FIX: Escape metacharacters when parsing dcm2niix outputs (https://github.com/nipy/nipype/pull/3417)
+  * FIX: Import error for nipype.interfaces.dipy.base (https://github.com/nipy/nipype/pull/3414)
+  * FIX: ``ValueError`` when using ``ResourceMonitor`` (https://github.com/nipy/nipype/pull/3419)
+  * FIX: Improve error handling of ``CommandLine`` interfaces (https://github.com/nipy/nipype/pull/3395)
+  * FIX: Bugs in ApplyVDM interface (https://github.com/nipy/nipype/pull/3396)
+  * ENH: Add MRTrix3 interfaces (pared-down gh-3426) (https://github.com/nipy/nipype/pull/3445)
+  * ENH: Enable BidsDataGrabber to load saved layouts (https://github.com/nipy/nipype/pull/3421)
+  * ENH: ROBEX interface (https://github.com/nipy/nipype/pull/3443)
+  * ENH: Include several operations to ANTs's ImageMath interface, including ReplicateImage and ReplicateDisplacement (https://github.com/nipy/nipype/pull/3435)
+  * ENH: Add "GenericLabel" to antsRegistration interpolation option. (https://github.com/nipy/nipype/pull/3424)
+  * ENH: added Apply VDM functionality to FieldMap SPM interface (https://github.com/nipy/nipype/pull/3394)
+  * DOC: Side bar and main page fixes (https://github.com/nipy/nipype/pull/3397)
+  * TEST: Allow SVD columns to flip sign (https://github.com/nipy/nipype/pull/3405)
+  * MNT: rename dipy ``move_streamlines`` to ``transform_tracking_output`` (https://github.com/nipy/nipype/pull/3412)
+  * MNT: Test on Python 3.10 (https://github.com/nipy/nipype/pull/3438)
+  * MNT: Added ORCID iD (https://github.com/nipy/nipype/pull/3436)
+
+
 1.7.0 (October 20, 2021)
 ========================
 
@@ -308,7 +443,7 @@ Python 1.2.3 will be the last version to support Python 3.4.
 
   * FIX: ANTS LaplacianThickness cmdline opts fixed up (https://github.com/nipy/nipype/pull/2846)
   * FIX: Resolve LinAlgError during SVD (https://github.com/nipy/nipype/pull/2838)
-  * ENH: Add interfaces wrapping DIPY worflows (https://github.com/nipy/nipype/pull/2830)
+  * ENH: Add interfaces wrapping DIPY workflows (https://github.com/nipy/nipype/pull/2830)
   * ENH: Update BIDSDataGrabber for pybids 0.7 (https://github.com/nipy/nipype/pull/2737)
   * ENH: Add FSL `eddy_quad` interface (https://github.com/nipy/nipype/pull/2825)
   * ENH: Support tckgen -select in MRtrix3 v3+ (https://github.com/nipy/nipype/pull/2823)

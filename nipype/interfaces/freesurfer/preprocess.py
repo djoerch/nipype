@@ -9,10 +9,11 @@ from glob import glob
 import shutil
 import sys
 
+from looseversion import LooseVersion
 import numpy as np
 from nibabel import load
 
-from ... import logging, LooseVersion
+from ... import logging
 from ...utils.filemanip import fname_presuffix, check_depends
 from ..io import FreeSurferSource
 from ..base import (
@@ -135,7 +136,7 @@ class UnpackSDICOMDirInputSpec(FSTraitedSpec):
         argstr="-scanonly %s",
         desc="only scan the directory and put result in file",
     )
-    log_file = File(exists=True, argstr="-log %s", desc="explicilty set log file")
+    log_file = File(exists=True, argstr="-log %s", desc="explicitly set log file")
     spm_zeropad = traits.Int(
         argstr="-nspmzeropad %d", desc="set frame number zero padding width for SPM"
     )
@@ -1833,7 +1834,6 @@ class BBRegister(FSCommand):
     output_spec = BBRegisterOutputSpec
 
     def _list_outputs(self):
-
         outputs = self.output_spec().get()
         _in = self.inputs
 
@@ -1883,21 +1883,16 @@ class BBRegister(FSCommand):
         return outputs
 
     def _format_arg(self, name, spec, value):
-        if (
-            name
-            in (
-                "registered_file",
-                "out_fsl_file",
-                "out_lta_file",
-                "init_cost_file",
-            )
-            and isinstance(value, bool)
-        ):
+        if name in (
+            "registered_file",
+            "out_fsl_file",
+            "out_lta_file",
+            "init_cost_file",
+        ) and isinstance(value, bool):
             value = self._list_outputs()[name]
         return super(BBRegister, self)._format_arg(name, spec, value)
 
     def _gen_filename(self, name):
-
         if name == "out_reg_file":
             return self._list_outputs()[name]
         return None
@@ -2184,7 +2179,6 @@ class Smooth(FSCommand):
 
 
 class RobustRegisterInputSpec(FSTraitedSpec):
-
     source_file = File(
         exists=True, mandatory=True, argstr="--mov %s", desc="volume to be registered"
     )
@@ -2306,7 +2300,6 @@ class RobustRegisterInputSpec(FSTraitedSpec):
 
 
 class RobustRegisterOutputSpec(TraitedSpec):
-
     out_reg_file = File(exists=True, desc="output registration file")
     registered_file = File(exists=True, desc="output image with registration applied")
     weights_file = File(exists=True, desc="image of weights used")
@@ -2365,8 +2358,8 @@ class RobustRegister(FSCommand):
     def _list_outputs(self):
         outputs = self.output_spec().get()
         cwd = os.getcwd()
-        prefices = dict(src=self.inputs.source_file, trg=self.inputs.target_file)
-        suffices = dict(
+        prefixes = dict(src=self.inputs.source_file, trg=self.inputs.target_file)
+        suffixes = dict(
             out_reg_file=("src", "_robustreg.lta", False),
             registered_file=("src", "_robustreg", True),
             weights_file=("src", "_robustweights", True),
@@ -2376,12 +2369,12 @@ class RobustRegister(FSCommand):
             half_source_xfm=("src", "_robustxfm.lta", False),
             half_targ_xfm=("trg", "_robustxfm.lta", False),
         )
-        for name, sufftup in list(suffices.items()):
+        for name, sufftup in list(suffixes.items()):
             value = getattr(self.inputs, name)
             if value:
                 if value is True:
                     outputs[name] = fname_presuffix(
-                        prefices[sufftup[0]],
+                        prefixes[sufftup[0]],
                         suffix=sufftup[1],
                         newpath=cwd,
                         use_ext=sufftup[2],
@@ -2392,7 +2385,6 @@ class RobustRegister(FSCommand):
 
 
 class FitMSParamsInputSpec(FSTraitedSpec):
-
     in_files = traits.List(
         File(exists=True),
         argstr="%s",
@@ -2412,14 +2404,13 @@ class FitMSParamsInputSpec(FSTraitedSpec):
 
 
 class FitMSParamsOutputSpec(TraitedSpec):
-
     t1_image = File(exists=True, desc="image of estimated T1 relaxation values")
     pd_image = File(exists=True, desc="image of estimated proton density values")
     t2star_image = File(exists=True, desc="image of estimated T2* values")
 
 
 class FitMSParams(FSCommand):
-    """Estimate tissue paramaters from a set of FLASH images.
+    """Estimate tissue parameters from a set of FLASH images.
 
     Examples
     --------
@@ -2470,7 +2461,6 @@ class FitMSParams(FSCommand):
 
 
 class SynthesizeFLASHInputSpec(FSTraitedSpec):
-
     fixed_weighting = traits.Bool(
         position=1,
         argstr="-w",
@@ -2499,7 +2489,6 @@ class SynthesizeFLASHInputSpec(FSTraitedSpec):
 
 
 class SynthesizeFLASHOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="synthesized FLASH acquisition")
 
 
@@ -2659,7 +2648,7 @@ class WatershedSkullStrip(FSCommand):
     """This program strips skull and other outer non-brain tissue and
     produces the brain volume from T1 volume or the scanned volume.
 
-    The "watershed" segmentation algorithm was used to dertermine the
+    The "watershed" segmentation algorithm was used to determine the
     intensity values for white matter, grey matter, and CSF.
     A force field was then used to fit a spherical surface to the brain.
     The shape of the surface fit was then evaluated against a previously
@@ -2720,7 +2709,7 @@ class NormalizeInputSpec(FSTraitedSpec):
         argstr="-aseg %s", exists=True, desc="The input segmentation for Normalize"
     )
     transform = File(
-        exists=True, desc="Tranform file from the header of the input file"
+        exists=True, desc="Transform file from the header of the input file"
     )
 
 
@@ -2783,7 +2772,7 @@ class CANormalizeInputSpec(FSTraitedSpec):
         exists=True,
         mandatory=True,
         position=-2,
-        desc="The tranform file in lta format",
+        desc="The transform file in lta format",
     )
     # optional
     mask = File(argstr="-mask %s", exists=True, desc="Specifies volume to use as mask")
@@ -3261,7 +3250,7 @@ class SegmentCC(FSCommand):
 
     def aggregate_outputs(self, runtime=None, needed_outputs=None):
         # it is necessary to find the output files and move
-        # them to the correct loacation
+        # them to the correct location
         predicted_outputs = self._list_outputs()
         for name in ["out_file", "out_rotation"]:
             out_file = predicted_outputs[name]

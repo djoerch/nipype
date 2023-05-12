@@ -698,7 +698,7 @@ class CorticalThicknessInputSpec(ANTSCommandInputSpec):
 class CorticalThicknessOutputSpec(TraitedSpec):
     BrainExtractionMask = File(exists=True, desc="brain extraction mask")
     ExtractedBrainN4 = File(exists=True, desc="extracted brain from N4 image")
-    BrainSegmentation = File(exists=True, desc="brain segmentaion image")
+    BrainSegmentation = File(exists=True, desc="brain segmentation image")
     BrainSegmentationN4 = File(exists=True, desc="N4 corrected image")
     BrainSegmentationPosteriors = OutputMultiPath(
         File(exists=True), desc="Posterior probability images"
@@ -1009,10 +1009,10 @@ class BrainExtraction(ANTSCommand):
         runtime = super(BrainExtraction, self)._run_interface(runtime)
 
         # Still, double-check if it didn't found N4
-        if "we cant find" in runtime.stdout:
+        if "we can't find" in runtime.stdout:
             for line in runtime.stdout.split("\n"):
-                if line.strip().startswith("we cant find"):
-                    tool = line.strip().replace("we cant find the", "").split(" ")[0]
+                if line.strip().startswith("we can't find"):
+                    tool = line.strip().replace("we can't find the", "").split(" ")[0]
                     break
 
             errmsg = (

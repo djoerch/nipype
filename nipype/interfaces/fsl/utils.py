@@ -482,7 +482,6 @@ class ExtractROI(FSLCommand):
     output_spec = ExtractROIOutputSpec
 
     def _format_arg(self, name, spec, value):
-
         if name == "crop_list":
             return " ".join(map(str, sum(list(map(list, value)), [])))
         return super(ExtractROI, self)._format_arg(name, spec, value)
@@ -764,7 +763,7 @@ class ImageStatsInputSpec(FSLCommandInputSpec):
         exists=True,
         argstr="-K %s",
         position=2,
-        desc="generate seperate n submasks from indexMask, "
+        desc="generate separate n submasks from indexMask, "
         "for indexvalues 1..n where n is the maximum index "
         "value in indexMask, and generate statistics for each submask",
     )
@@ -1251,7 +1250,6 @@ class Slicer(FSLCommand):
 
 
 class PlotTimeSeriesInputSpec(FSLCommandInputSpec):
-
     in_file = traits.Either(
         File(exists=True),
         traits.List(File(exists=True)),
@@ -1282,7 +1280,7 @@ class PlotTimeSeriesInputSpec(FSLCommandInputSpec):
     labels = traits.Either(
         traits.Str, traits.List(traits.Str), argstr="%s", desc="label or list of labels"
     )
-    y_min = traits.Float(argstr="--ymin=%.2f", desc="minumum y value", xor=("y_range",))
+    y_min = traits.Float(argstr="--ymin=%.2f", desc="minimum y value", xor=("y_range",))
     y_max = traits.Float(argstr="--ymax=%.2f", desc="maximum y value", xor=("y_range",))
     y_range = traits.Tuple(
         traits.Float,
@@ -1308,7 +1306,6 @@ class PlotTimeSeriesInputSpec(FSLCommandInputSpec):
 
 
 class PlotTimeSeriesOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="image to write")
 
 
@@ -1374,7 +1371,6 @@ class PlotTimeSeries(FSLCommand):
 
 
 class PlotMotionParamsInputSpec(FSLCommandInputSpec):
-
     in_file = traits.Either(
         File(exists=True),
         traits.List(File(exists=True)),
@@ -1406,7 +1402,6 @@ class PlotMotionParamsInputSpec(FSLCommandInputSpec):
 
 
 class PlotMotionParamsOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="image to write")
 
 
@@ -1434,7 +1429,7 @@ class PlotMotionParams(FSLCommand):
     translations, while SPM prints them in the opposite order.  This interface
     should be able to plot timecourses of motion parameters generated from
     other sources as long as they fall under one of these two patterns.  For
-    more flexibilty, see the :class:`fsl.PlotTimeSeries` interface.
+    more flexibility, see the :class:`fsl.PlotTimeSeries` interface.
 
     """
 
@@ -1443,7 +1438,6 @@ class PlotMotionParams(FSLCommand):
     output_spec = PlotMotionParamsOutputSpec
 
     def _format_arg(self, name, spec, value):
-
         if name == "plot_type":
             source = self.inputs.in_source
 
@@ -1602,7 +1596,6 @@ class ConvertXFM(FSLCommand):
 
 
 class SwapDimensionsInputSpec(FSLCommandInputSpec):
-
     in_file = File(
         exists=True, mandatory=True, argstr="%s", position="1", desc="input image"
     )
@@ -1619,7 +1612,6 @@ class SwapDimensionsInputSpec(FSLCommandInputSpec):
 
 
 class SwapDimensionsOutputSpec(TraitedSpec):
-
     out_file = File(exists=True, desc="image with new dimensions")
 
 
@@ -1873,7 +1865,7 @@ class InvWarpInputSpec(FSLCommandInputSpec):
         ),
     )
     regularise = traits.Float(
-        argstr="--regularise=%f", desc="Regularization strength (deafult=1.0)."
+        argstr="--regularise=%f", desc="Regularization strength (default=1.0)."
     )
     noconstraint = traits.Bool(
         argstr="--noconstraint", desc="Do not apply Jacobian constraint"
@@ -2584,7 +2576,7 @@ class WarpPoints(CommandLine):
         if out_file is None:
             out_file, _ = op.splitext(in_file)
 
-        np.savetxt(streamlines, out_file + ".txt")
+        np.savetxt(out_file + ".txt", streamlines)
         return out_file + ".txt"
 
     def _coords_to_trk(self, points, out_file):
@@ -2834,3 +2826,92 @@ class MotionOutliers(FSLCommand):
     input_spec = MotionOutliersInputSpec
     output_spec = MotionOutliersOutputSpec
     _cmd = "fsl_motion_outliers"
+
+
+class Text2VestInputSpec(FSLCommandInputSpec):
+    in_file = File(
+        exists=True,
+        mandatory=True,
+        desc="plain text file representing your design, contrast, or f-test matrix",
+        argstr="%s",
+        position=0,
+    )
+
+    out_file = File(
+        mandatory=True,
+        desc=(
+            "file name to store matrix data in the format used by FSL tools"
+            " (e.g., design.mat, design.con design.fts)"
+        ),
+        argstr="%s",
+        position=1,
+    )
+
+
+class Text2VestOutputSpec(TraitedSpec):
+    out_file = File(desc="matrix data in the format used by FSL tools")
+
+
+class Text2Vest(FSLCommand):
+    """
+    Use FSL Text2Vest`https://web.mit.edu/fsl_v5.0.10/fsl/doc/wiki/GLM(2f)CreatingDesignMatricesByHand.html`_
+    to convert your plain text design matrix data into the format used by the FSL tools.
+
+    Examples
+    --------
+    >>> from nipype.interfaces.fsl import Text2Vest
+    >>> t2v = Text2Vest()
+    >>> t2v.inputs.in_file = "design.txt"
+    >>> t2v.inputs.out_file = "design.mat"
+    >>> t2v.cmdline
+    'Text2Vest design.txt design.mat'
+    >>> res = t2v.run() # doctest: +SKIP
+    """
+
+    input_spec = Text2VestInputSpec
+    output_spec = Text2VestOutputSpec
+
+    _cmd = "Text2Vest"
+
+
+class Vest2TextInputSpec(FSLCommandInputSpec):
+    in_file = File(
+        exists=True,
+        mandatory=True,
+        desc="matrix data stored in the format used by FSL tools",
+        argstr="%s",
+        position=0,
+    )
+
+    out_file = File(
+        "design.txt",
+        usedefault=True,
+        desc="file name to store text output from matrix",
+        argstr="%s",
+        position=1,
+    )
+
+
+class Vest2TextOutputSpec(TraitedSpec):
+    out_file = File(desc="plain text representation of FSL matrix")
+
+
+class Vest2Text(FSLCommand):
+    """
+    Use FSL Vest2Text`https://web.mit.edu/fsl_v5.0.10/fsl/doc/wiki/GLM(2f)CreatingDesignMatricesByHand.html`_
+    to convert your design.mat design.con and design.fts files into plain text.
+
+    Examples
+    --------
+    >>> from nipype.interfaces.fsl import Vest2Text
+    >>> v2t = Vest2Text()
+    >>> v2t.inputs.in_file = "design.mat"
+    >>> v2t.cmdline
+    'Vest2Text design.mat design.txt'
+    >>> res = v2t.run() # doctest: +SKIP
+    """
+
+    input_spec = Vest2TextInputSpec
+    output_spec = Vest2TextOutputSpec
+
+    _cmd = "Vest2Text"

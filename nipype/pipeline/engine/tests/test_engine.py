@@ -196,7 +196,6 @@ def test_synchronize_tuples_expansion():
 
 
 def test_itersource_expansion():
-
     wf1 = pe.Workflow(name="test")
     node1 = pe.Node(EngineTestInterface(), name="node1")
     node1.iterables = ("input1", [1, 2])
@@ -572,7 +571,7 @@ def test_write_graph_dotfile(tmpdir, graph_type, simple):
                 )
 
     # graph_detailed is the same for orig, flat, exec (if no iterables)
-    # graph_detailed is not created for hierachical or colored
+    # graph_detailed is not created for hierarchical or colored
     if graph_type not in ["hierarchical", "colored"]:
         with open("graph_detailed.dot") as f:
             graph_str = f.read()
@@ -665,7 +664,7 @@ def test_write_graph_dotfile_iterables(tmpdir, graph_type, simple):
                     in graph_str
                 )
 
-    # graph_detailed is not created for hierachical or colored
+    # graph_detailed is not created for hierarchical or colored
     if graph_type not in ["hierarchical", "colored"]:
         with open("graph_detailed.dot") as f:
             graph_str = f.read()
